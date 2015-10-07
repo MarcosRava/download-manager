@@ -1,0 +1,25 @@
+{
+  "name": "download-manager",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MarcosRava/download-manager.git"
+  },
+  "author": "Marcos Rava",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MarcosRava/download-manager/issues"
+  },
+  "homepage": "https://github.com/MarcosRava/download-manager",
+  "devDependencies": {
+    "mocha": "^2.3.3"
+  },
+  "dependencies": {
+    "q": "^1.4.1"
+  }
+}
