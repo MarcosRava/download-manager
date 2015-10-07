@@ -1,4 +1,5 @@
 /*jslint node: true */
+"use strict";
 
 var fs, config, path, newLine, util, Q, deferred, radix, exitStatus;
 
@@ -8,18 +9,18 @@ path = require('path');
 exitStatus = require('./wget-exit-status.json');
 deferred = Q.defer();
 radix = 10;
-newLine = process.platform.indexOf('win') !== -1 ? "\033[0G" : "\r";
+newLine = process.platform.indexOf('win') !== -1 ? "\x1B[0G" : "\r";
 
-function download(url, dir) {
+function download(options) {
   var spawn, directory, wgetParams, wget, length, indexOfPcent,
     percent, speed, d, file;
   spawn = require('child_process').spawn;
-  directory = path.resolve(dir);
-  wgetParams = [ '--directory-prefix=' + directory, '--continue', url];
+  directory = path.resolve(options.directory);
+  wgetParams = [ '--directory-prefix=' + directory, '--continue', options.url];
   wgetParams.push('--trust-server-names');
-//  if (config.limitRate) {
-//    wgetParams.push('--limit-rate=' + config.limitRate);
-//  }
+  if (options.limitRate) {
+    wgetParams.push('--limit-rate=' + config.limitRate);
+  }
   wget = spawn('wget', wgetParams);
   wget.stderr.on('data', function (data, code) {
     d = data.toString();
@@ -35,7 +36,7 @@ function download(url, dir) {
       speed = d.substring(indexOfPcent + 2, indexOfPcent + 7);
       process.stdout.write(file + ': ' + percent + ' ' + speed + newLine);
       //process.stdout.write(d);
-      deferred.notify({percent: percent, speed: speed, url: url, file: file, directory: directory});
+      deferred.notify({percent: percent, speed: speed, url: options.url, file: file, directory: directory});
       if (percent.trim() === '100%') {
         
       //finished
